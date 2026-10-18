@@ -1,0 +1,38 @@
+
+@media screen and (max-width: 1100px) {
+
+    .search-box button, 
+    .search-box a {
+        padding: 8px 20px;
+    }
+    
+}
+
+@media screen and (max-width: 800px) {
+
+    body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper::before, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-footer, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-footer::before, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-header, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-header::before {
+        margin-left: 0;
+    }
+
+    .btn-items{
+        font-size: 0; 
+    }
+
+    .search-box button, 
+    .search-box a {
+        padding: 10px 15px;
+    }
+
+    .btn-items i{
+        font-size: 20px; 
+    }
+
+    .btn-mobile{
+        display: block;
+    }
+
+    .search-box input{
+        height: 40px;
+    }
+    
+}

@@ -1,0 +1,113 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Paciente</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+        
+                <div class="title-item">
+                    <h3 class="" for="rutificador">Paciente</h3>
+                </div>
+                
+                <div class="container">
+                    <div class="header-formulario mt-5 mb-5">
+                    </div>
+                    <div class="row mb-5 search-box">
+                        <form class="d-flex col-12 mb-3 mt-3 pt-3 pb-3" action="/search/paciente/" method="POST">
+                            {% csrf_token %}
+                            <input class="bg-white rounded col-6 text-center " type="text" id="rut" name="rut" placeholder="Ingrese RUT" />
+                            <button type="submit" class="btn btn-primary col-2 mx-2">Buscar</button>
+                            <a href="/panel/paciente/add/" class="btn btn-primary">Agregar Paciente</a>
+                        </form>
+                    </div>
+        
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rut</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Estado</th>
+                                <th>Actions</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                              <form action="/search/atencion/" method="POST">
+                              <tr>
+                                  <td>{{row.rut}}</td>
+                                  <td>{{row.nombre}}</td>
+                                  <td>{{row.apellido}}</td>
+                                  {% if row.habilitado %}
+                                  <td>Activo</td>
+                                  {% else %}
+                                  <td>Inactivo</td>
+                                  {% endif %}
+                                  <td>
+                                      <div class="">
+                                        {% if row.habilitado  %}
+                                          <a type="button" class="btn btn-primary col-4 text-center" style="height: 38px;" href="{% url 'panel-atencion-add' row.rut %}">Nueva incidencia</a>
+                                        {% endif %}
+                                            {% csrf_token %}
+                                            <input type="text" name="rut" value="{{row.rut}}" hidden>
+                                            <button type="submit" class="btn btn-secondary text-center col-3" >
+                                              Historial
+                                            </button>
+
+                                          <a type="button" class="btn btn-primary text-center col-3" href="{% url 'panel-paciente-edit' row.rut %}">Editar</a>
+                                          <!-- <a type="button" class="btn btn-primary col-2 text-center" href="/panel/paciente/{{row.rut}}" >Deshabilitar</a> -->
+                                          
+                                      </div>
+                                  </td>
+                              </tr>
+                            </form>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+        
+                </div>
+        
+        
+            </section>
+
+
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

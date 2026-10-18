@@ -1,0 +1,60 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Metricas</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Metricas</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="title-item row">
+                  <h3 class="" for="rutificador">Métricas</h3>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="header-formulario mt-5 mb-5"></div>
+
+                    <!-- Gráfico como img -->
+                    <div class="row">
+                        <div class="col-6">
+                            <img src="data:image/png;base64,{{ img_motivo }}" alt="Gráfico de dona motivo" class="img-fluid">
+                        </div>
+                        <div class="col-6">
+                            <img src="data:image/png;base64,{{ img_practicante  }}" alt="Gráfico de dona practicante" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

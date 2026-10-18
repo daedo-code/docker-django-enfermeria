@@ -1,0 +1,96 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Paciente</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+        
+
+                
+                <form class="border border-teritian mx-3 p-3 bg-light" method="POST">
+                    <div class="title-item">
+                      <h3 class="">Editar Paciente</h3>
+                    </div>
+                    {% csrf_token %} 
+                     <!-- <h5 class="text-center">Agregar Practicante</h5> -->
+                     <div class="mb-3" >
+                       <label for="nombre" class="form-label">Nombre</label>
+                       <input type="text" class="form-control" id="nombre" name="nombre" value="{{user.nombre}}">
+                     </div>
+                     <div class="mb-3" >
+                       <label for="rut" class="form-label">Rut</label>
+                        <input type="text" class="form-control" id="rut" value="{{user.rut}}" readonly>
+                     </div>
+                     <div class="mb-3" >
+                       <label for="nombre" class="form-label">Apellido</label>
+                       <input type="text" class="form-control" id="apellido" name="apellido" value="{{user.apellido}}">
+                     </div>
+                     <div class="mb-3" >
+                       <label for="direccion" class="form-label">Direccion</label>
+                       <input type="text" class="form-control" id="direccion" name="direccion" value="{{user.direccion}}">
+                     </div>
+
+                     <div class="form-group">
+                      <label for="estado">Estado</label>
+                      <select name="habilitado" class="form-control">
+                          <option value="" selected disabled>Seleccionar Estado</option>
+                              {% if user.habilitado %}
+                              <option value="Activo" selected>Activo</option>
+                              <option value="Inactivo">Inactivo</option>
+                              {% else %}
+                              <option value="Activo">Activo</option>
+                              <option value="Inactivo" selected>Inactivo</option>
+                              {% endif %}
+                      </select>
+                    </div>
+
+                     <!-- <div class="mb-3 form-check">
+                       <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                       <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                     </div> -->
+         
+                     <button type="submit" class="btn btn-primary px-5">Editar</button>
+         
+                   </form>
+      
+            </section>
+
+
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

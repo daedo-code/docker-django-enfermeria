@@ -1,0 +1,27 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: enfermeria_mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-enfermeria}"
+      MYSQL_USER: "${MYSQL_USER:-enfermeria}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}"
+
+    ports:
+      - "3312:3306"
+
+    volumes:
+      - enfermeria_mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  enfermeria_mysql_data:

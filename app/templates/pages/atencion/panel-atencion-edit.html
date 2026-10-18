@@ -1,0 +1,142 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Atencion</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+        
+
+                
+                <form class="border border-teritian mx-3 p-3 bg-light" method="POST">
+                    <div class="title-item">
+                      <h3 class="blancoLetra varianteCuatroBackground mb-3 pt-3 pb-3 text-center">Editar Atencion</h3>
+                    </div>
+                    {% csrf_token %} 
+
+                     <div class="mb-3" >
+                       <label for="sbp" class="form-label">SBP</label>
+                       <input type="text" class="form-control" id="sbp" name="sbp" value="{{atencion.sbp}}">
+                     </div>
+                     <div class="mb-3" >
+                       <label for="dbp" class="form-label">DBP</label>
+                       <input type="text" class="form-control" id="dbp" name="dbp" value="{{atencion.dbp}}">
+                     </div>
+                     <div class="mb-3" >
+                       <label for="temperatura" class="form-label">Temperatura</label>
+                       <input type="text" class="form-control" id="temperatura" name="temperatura" value="{{atencion.temperatura}}">
+                     </div>
+                     <div class="mb-3" >
+                       <label for="pulso" class="form-label">Pulso</label>
+                       <input type="text" class="form-control" id="pulso" name="pulso" value="{{atencion.pulso}}">
+                     </div>
+
+                     <div class="mb-3" >
+                      <label for="saturacion" class="form-label">SatO2</label>
+                      <input type="text" class="form-control" id="saturacion" name="saturacion" value="{{atencion.saturacion}}">
+                    </div>
+
+                    <div class="row">
+                      <div class="col-6">
+                          <div class="form-group">
+                              <label for="practicante">Practicante</label>
+                              <select name="practicante" class="form-control">
+                                  <option value="" selected disabled>Seleccionar Practicante</option>
+                                  {% for practicante in practicantes %}
+                                      <option value="{{ practicante.rut }}">{{ practicante.nombre }} {{ practicante.apellido }}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="form-group">
+                              <label for="rutProcedencia">Rut Paciente</label>
+                              <input type="text" class="form-control" name="rut" value="{{atencion.paciente.rut}}" readonly>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-12">
+                          <label for="rutProcedencia">Razón de ingreso</label>
+                          <div class="form-check">
+                              <div class="row justify-content-around">
+                                  <div class="col-4">
+                                      <label class="col-4 form-check-label">
+                                          <input class="form-check-input" type="radio" name="razonIngreso" value="enfermedad" 
+                                          {% if atencion.razonIngreso ==  "enfermedad" %} checked {% endif %} >
+                                          Enfermedad
+                                      </label>
+                                  </div>
+                                  <div class="col-4">
+                                      <label class="col-4 form-check-label">
+                                          <input class="form-check-input" type="radio" name="razonIngreso" value="estres"
+                                          {% if atencion.razonIngreso ==  "estres" %} checked {% endif %}>
+                                          Estrés
+                                      </label>
+                                  </div>
+                                  <div class="col-4">
+                                      <label class="col-4 form-check-label">
+                                          <input class="form-check-input" type="radio" name="razonIngreso" value="accidente"
+                                          {% if atencion.razonIngreso ==  "accidente" %} checked {% endif %}>
+                                          Accidente
+                                      </label>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                    <div class="row">
+                      <div class="col-8">
+                          <div class="form-group">
+                              <label>Procedimiento aplicado</label>
+                              <textarea class="form-control" rows="3" name="procedimiento" placeholder="Ej: Se le aplica al paciente...">{{atencion.procedimiento}}</textarea>
+                          </div>
+                      </div>
+                    </div>
+        
+                     <button type="submit" class="btn btn-primary px-5">Editar</button>
+         
+                   </form>
+      
+            </section>
+
+
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

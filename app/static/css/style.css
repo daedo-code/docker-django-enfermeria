@@ -1,0 +1,92 @@
+*{
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+}
+
+body{
+    /* display: flex; */
+}
+
+.section-paciente{
+    /* border: 1px solid #000; */
+
+}
+
+
+.panel{
+    background: rgb(250, 109, 109);
+    padding: 10px 10px !important;
+    border: 1px solid #000;
+    width: 200px;
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel a{
+    margin-top: 10px;
+    border: 1px solid #000;
+    text-decoration: none;
+    color: #000;
+    padding: 10px 10px;
+    background: #fff;
+    font-weight: 400;
+}
+
+.title-item{
+    /* border: 1px solid #000; */
+    background: #D02E2C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    height: 100px;
+}
+.title-item h3{
+    padding: 0;
+    margin: 0;
+}
+
+.btn-mobile{
+    display: none;
+}
+
+
+.search-box input{
+    border: 1px solid #000 !important;
+    height: 40px;
+    margin-right: 50px;
+}
+
+.btn-items {
+    padding: 8px 50px;
+}
+
+
+.list-box{
+    /* border: 1px solid #000; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-box p{
+    margin: 10px 10px;
+}
+
+.caja-one{
+    background: red;
+}
+
+.btn-primary{
+    background-color: #D02E2C;
+    border: #D02E2C;
+    transition: 0.1s ease-in-out;
+}
+
+.btn-primary:hover{
+    background: #990000;
+    border: #D02E2C;
+    box-shadow: #000;
+}

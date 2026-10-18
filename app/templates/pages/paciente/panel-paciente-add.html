@@ -1,0 +1,81 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <!-- <h1 class="m-0">Practicante</h1> -->
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Practicante</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+        
+
+                
+                <form class="border border-teritian mx-3 p-3 bg-light" method="POST">
+                    {% csrf_token %} 
+                    <div class="title-item">
+                      <h3 class="">Agregar Paciente</h3>
+                    </div>
+                     <div class="mb-3" >
+                       <label for="nombre" class="form-label">Nombre</label>
+                       <input type="text" class="form-control" id="nombre" name="nombre">
+                     </div>
+                     <div class="mb-3" >
+                       <label for="rut" class="form-label">Rut</label>
+                       <input type="text" class="form-control" id="rut" name="rut" >
+                     </div>
+                     <div class="mb-3" >
+                       <label for="nombre" class="form-label">Apellido</label>
+                       <input type="text" class="form-control" id="apellido" name="apellido" >
+                     </div>
+                     <div class="mb-3" >
+                       <label for="direccion" class="form-label">Direccion</label>
+                       <input type="text" class="form-control" id="direccion" name="direccion" >
+                     </div>
+
+                     <!-- <div class="mb-3 form-check">
+                       <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                       <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                     </div> -->
+         
+                     <button type="submit" class="btn btn-primary px-5">Agregar</button>
+         
+                   </form>
+      
+            </section>
+
+
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

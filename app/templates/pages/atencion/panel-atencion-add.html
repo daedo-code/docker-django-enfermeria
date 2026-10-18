@@ -1,0 +1,190 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Practicante</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+        
+                <div class="title-item">
+                    <h3 class="" for="rutificador">Practicante</h3>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="card-body">
+
+                        <div class="row mt-4 mb-4">
+                            <div class="col-12">
+                                <h2>Datos de ingreso incidencia</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="inputPA">SBP</label>
+                                    <input type="text" class="form-control" name="sbp" placeholder="Systolic BP">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="inputPA">DBP</label>
+                                    <input type="text" class="form-control" name="dbp" placeholder="Diastolic BP">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inputFC">Pulso</label>
+                                    <input type="text" class="form-control" name="pulso" placeholder="Ej: 65">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inputFC">Temperatura</label>
+                                    <input type="text" class="form-control" name="temperatura" placeholder="Ej: 65">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="inputSat">SatO2</label>
+                                    <input type="text" class="form-control" name="saturacion" placeholder="Ej: 98 %">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-4 mb-4">
+                            <div class="col-12">
+                                <h2>Validación de paciente e ingreso</h2>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="practicante">Practicante</label>
+                                    <select name="practicante" class="form-control">
+                                        <option value="" selected disabled>Seleccionar Practicante</option>
+                                        {% for practicante in practicantes %}
+                                            <option value="{{ practicante.rut }}">{{ practicante.nombre }} {{ practicante.apellido }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Aquí debería venir el rut seleccionado en el rutificador de la fila en la cual se hace el "nueva incidencia" -->
+                                <div class="form-group">
+                                    <label for="rutProcedencia">Rut Paciente</label>
+                                    <input type="text" class="form-control" name="rut" value="{{paciente.rut}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label for="rutProcedencia">Razón de ingreso</label>
+                                <div class="form-check">
+                                    <div class="row justify-content-around">
+                                        <div class="col-4">
+                                            <label class="col-4 form-check-label">
+                                                <input class="form-check-input" type="radio" name="razonIngreso" value="enfermedad">
+                                                Enfermedad
+                                            </label>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="col-4 form-check-label">
+                                                <input class="form-check-input" type="radio" name="razonIngreso" value="estres">
+                                                Estrés
+                                            </label>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="col-4 form-check-label">
+                                                <input class="form-check-input" type="radio" name="razonIngreso" value="accidente">
+                                                Accidente
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-8">
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    <label>Procedimiento aplicado</label>
+                                    <textarea class="form-control" rows="3" name="procedimiento" placeholder="Ej: Se le aplica al paciente..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
+                                        <label class="custom-control-label" for="exampleCheck1">Confirmo que los datos ingresados aquí fueron entregados por la persona en cuestión.</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <div class="row justify-content-between">
+                            <div class="col-6">
+                                <a href="/panel/paciente/" class="btn btn-primary">Volver</a>
+                            </div>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+      
+            
+      
+        
+        
+            </section>
+
+
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

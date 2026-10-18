@@ -1,0 +1,104 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Practicante</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+
+            {% if user.perfil.id == 'I01' %}
+        
+                <div class="title-item">
+                    <h3 class="" for="rutificador">Practicante</h3>
+                </div>
+        
+              <div class="container">
+                  <div class="header-formulario mt-5 mb-5">
+                  </div>
+                  <div class="row mb-5 search-box">
+                      <form class="justify-content-around col-xl-12 mb-3 mt-3" action="/search/practicante/" method="POST">
+                          {% csrf_token %}
+                          <input class="bg-white rounded col-6 text-center" type="text" id="rut" name="rut" placeholder="Ingrese RUT" />
+                          <button type="submit" class="btn btn-primary btn-items">Buscar <i class="fas fa-search btn-mobile"></i></button>
+                          <a href="/panel/practicante/add/" class="btn btn-primary btn-items">Agregar <i class="fas fa-plus-circle btn-mobile"></i></a>
+                      </form>
+                  </div>
+      
+                  <table class="table col-xl-9">
+                      <thead>
+                          <tr>
+                              <th>Rut</th>
+                              <th>Nombre</th>
+                              <th>Apellido</th>
+                              <th>Estado</th>
+                              <th>Actions</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for row in rows %}
+                              <tr>
+                                  <td>{{row.rut}}</td>
+                                  <td>{{row.nombre}}</td>
+                                  <td>{{row.apellido}}</td>
+                                  {% if row.is_active %}
+                                  <td>Activo</td>
+                                  {% else %}
+                                  <td>Inactivo</td>
+                                  {% endif %}
+                                  <td>
+                                      <div class="">
+                                          <a type="button" class="btn btn-primary col-6 text-center" href="{% url 'panel-practicante-edit' row.rut %}">Editar</a>
+                                      </div>
+                                  </td>
+                               </tr>
+                          {% endfor %}
+                          
+                      </tbody>
+                  </table>
+              </div>
+
+            {% else %}
+
+            <div class="title-item">
+              <h3 class="" for="rutificador">No estas autorizado para ver el modulo de listado</h3>
+            </div>
+
+            {% endif %}
+            
+            </section>
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}

@@ -1,0 +1,84 @@
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+<main class="container">
+    <div class="row">
+
+        <!-- <section class="col-md-4 offset-md-4">
+    
+            <form action="/signin/" method="POST" class="card card-body mt-5">
+                <h1 class="text-center">Signin</h1>
+                {{error}}
+                
+                {% csrf_token %}
+        
+                <div class="mb-3">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Write your username">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Write your password">
+                </div>
+                
+                <button class="btn btn-primary">
+                    Signin
+                </button>
+            </form>
+
+        </section> -->
+
+        <div class="container container-login">
+            <div class="info">
+                <h1>Sistema Enfermería Inacap</h1><span>Made with<i class="fa fa-heart"></i>
+                        by<a href="#">Jhon Doe</a></span>
+            </div>
+        
+            <footer class="main-footer">
+                <div class="float-right d-none d-sm-block">
+                </div>
+            </footer>
+        
+        </div>
+        
+        {% if error %}
+        <div class="box-alert" id="box-alert">
+            {{ error }}
+            <button  data-dismiss="alert" aria-label="Close" onclick="cerrarAlerta()">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endif %}
+        
+
+        <div class="form">
+            <div class="thumbnail"><img src="{% static 'img/login-icon.svg' %}" alt="Enfermeria" /></div>
+        
+            <form class="login-form" method="POST">
+                
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Usuario" />
+                <input type="password" name="password" placeholder="Contraseña" />
+                <!-- <button>login</button> -->
+                <div class="">
+                    <button>Login</button>
+                </div>
+                <!-- <p class="message">¿olvidó contraseña? <a href="#"> Recupere acá</a></p> -->
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+function cerrarAlerta(){
+    var alert =  document.getElementById('box-alert');
+    alert.style.display = "none";
+}
+
+</script>
+

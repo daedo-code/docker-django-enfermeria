@@ -1,0 +1,113 @@
+{% extends 'panel.html' %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item active">Paciente</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="">
+
+
+            <section class="section-paciente">
+        
+                <div class="title-item">
+                    <h3 class="" for="rutificador">Atencion</h3>
+                </div>
+                
+                <div class="">
+                    <div class="header-formulario mt-5 mb-5">
+                    </div>
+                    <div class="row mb-5 search-box">
+                        <form class="d-flex justify-content-around col-12 mb-3 mt-3 pt-3 pb-3" action="/search/atencion/" method="POST">
+                            {% csrf_token %}
+                            <input class="bg-white rounded col-6 text-center" type="text" id="rut" name="rut" placeholder="Ingrese Rut" />
+                            <button type="submit" class="btn btn-primary px-5">Buscar</button>
+                        </form>
+                    </div>
+        
+                    <table class="table">
+                      <thead>
+                          <tr>
+                              <th>ID</th>
+                              <th>Rut</th>
+                              <th>Inicio</th>
+                              <th>Termino</th>
+                              <th>SBP</th>
+                              <th>DBP</th>
+                              <th>Temp</th>
+                              <th>Pulso</th>
+                              <th>SatO2</th>
+                              <th>motivo</th>
+                              <th>Actions</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for row in rows %}
+                          <tr>
+                              <td style="width: 2%;">{{row.id}}</td>
+                              <td style="width: 2%;">{{row.paciente.rut}}</td>
+                              <td style="width: 5%;">{{row.fechaInicio}}</td>
+                              <td style="width: 5%;">{{row.fechaTermino}}</td>
+                              <td style="width: 2%;">{{row.sbp}}</td>
+                              <td style="width: 2%;">{{row.dbp}}</td>
+                              <td style="width: 2%;">{{row.temperatura}}</td>
+                              <td style="width: 2%;">{{row.pulso}}</td>
+                              <td style="width: 2%;">{{row.saturacion}}</td>
+                              <td style="width: 2%;">{{row.razonIngreso}}</td>
+                              <td style="width: 10%;">
+
+                                      <a type="button" class="btn btn-primary col-5 text-center" href="{% url 'panel-atencion-edit' row.id %}" style="width: 150px;">
+                                        Editar <i class="fas fa-edit" style="display: none;"></i>
+                                      </a>
+                                      {% if not row.anulada and user.perfil_id == 'I01' %}
+                                      <form method="post" action="{% url 'panel-atencion-anular' row.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary col-5 text-center" style="width: 150px;" onclick="return confirm('Anular esta atencion?');">Anular</button>
+                                      </form>
+                                      {% endif %}
+
+                              </td>
+                          {% endfor %}
+                          </tr>
+                      </tbody>
+                  </table>
+        
+                </div>
+        
+        
+            </section>
+
+
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+{% endblock %}
