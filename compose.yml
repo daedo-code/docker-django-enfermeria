@@ -6,13 +6,13 @@ services:
     restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE:-enfermeria}"
-      MYSQL_USER: "${MYSQL_USER:-enfermeria}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
     ports:
-      - "3312:3306"
+      - "${MYSQL_PORT}:3306"
 
     volumes:
       - enfermeria_mysql_data:/var/lib/mysql
