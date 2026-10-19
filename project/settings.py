@@ -149,3 +149,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'app.User'
+
+FORCE_SCRIPT_NAME = (
+    env("DJANGO_SCRIPT_NAME", default="").rstrip("/") or None
+)
