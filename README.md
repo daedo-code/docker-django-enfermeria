@@ -94,6 +94,17 @@ Para restablecer la contrasena de `admin`:
 python manage.py bootstrap_enfermeria --reset-password --password "NuevaClaveSegura"
 ```
 
+Para crear o actualizar el administrador de demostración:
+
+```cmd
+python manage.py bootstrap_enfermeria --with-demo-admin
+```
+
+Este usuario tiene permisos completos de administrador y utiliza las
+credenciales `demo_user` / `demo_1234`, con identificador `DEMO-ADMIN-001`.
+Está destinado a demostraciones, incluso en entornos publicados; no debe tener
+acceso a datos clínicos reales.
+
 ## Datos de demostracion
 
 El comando crea cinco encargados, cinco pacientes y cinco atenciones ficticias con datos clinicos coherentes:
@@ -116,7 +127,7 @@ DemoSegura-2026
 
 Los datos demo se identifican internamente por los usuarios `demo_encargado_*` y por el prefijo `DEMO:` en el procedimiento. El comando `--clear` tambien elimina los datos de prueba creados por versiones anteriores del comando.
 
-No uses las credenciales ni datos de demostracion en produccion.
+No uses las credenciales ni datos de demostracion con información clínica real.
 
 ## Migraciones
 

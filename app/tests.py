@@ -184,6 +184,17 @@ class BootstrapCommandTests(TestCase):
         self.assertEqual(admin.perfil_id, 'I01')
         self.assertEqual(Perfil.objects.get(pk='I02').descripcion, 'Encargados')
 
+    def test_bootstrap_creates_demo_admin_when_requested(self):
+        call_command('bootstrap_enfermeria', '--with-demo-admin', verbosity=0)
+
+        demo_admin = User.objects.get(username='demo_user')
+        self.assertEqual(demo_admin.rut, 'DEMO-ADMIN-001')
+        self.assertTrue(demo_admin.check_password('demo_1234'))
+        self.assertTrue(demo_admin.is_superuser)
+        self.assertTrue(demo_admin.is_staff)
+        self.assertTrue(demo_admin.is_active)
+        self.assertEqual(demo_admin.perfil_id, 'I01')
+
 
 class SeedCommandTests(TestCase):
     def test_seed_creates_and_clears_only_test_data(self):

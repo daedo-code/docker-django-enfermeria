@@ -43,3 +43,9 @@
   nombradas con la etiqueta `{% url %}`.
 - La anulación de atenciones ahora solicita el motivo mediante un modal,
   manteniendo la validación obligatoria del servidor.
+
+### Administrador de demostración
+
+- El comando `bootstrap_enfermeria` incorpora la opción explícita
+  `--with-demo-admin` para crear o actualizar `demo_user` como administrador
+  de demostración.
