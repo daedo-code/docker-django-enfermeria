@@ -41,3 +41,5 @@
 - Se eliminaron templates sin referencias activas.
 - Los enlaces y acciones internas de los templates activos ahora usan rutas
   nombradas con la etiqueta `{% url %}`.
+- La anulación de atenciones ahora solicita el motivo mediante un modal,
+  manteniendo la validación obligatoria del servidor.

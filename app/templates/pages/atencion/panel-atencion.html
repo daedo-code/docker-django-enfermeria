@@ -88,18 +88,51 @@
                                        </a>
                                        {% endif %}
                                        {% if not row.anulada and puede_anular_atenciones %}
-                                       <form method="post" action="{% url 'panel-atencion-anular' row.id %}" class="d-inline">
-                                         {% csrf_token %}
-                                         <input type="text" name="motivo_anulacion" class="form-control mb-1" maxlength="500" required placeholder="Motivo de anulación">
-                                         <button type="submit" class="btn btn-primary col-5 text-center" style="width: 150px;" onclick="return confirm('Anular esta atencion?');">Anular</button>
-                                       </form>
+                                       <button
+                                         type="button"
+                                         class="btn btn-primary col-5 text-center"
+                                         style="width: 150px;"
+                                         data-toggle="modal"
+                                         data-target="#anularAtencionModal"
+                                         data-anulacion-url="{% url 'panel-atencion-anular' row.id %}"
+                                         data-atencion-id="{{ row.id }}"
+                                       >Anular</button>
                                        {% endif %}
 
                                </td>
                            </tr>
                            {% endfor %}
                        </tbody>
-                  </table>
+                   </table>
+
+                    {% if puede_anular_atenciones %}
+                    <div class="modal fade" id="anularAtencionModal" tabindex="-1" role="dialog" aria-labelledby="anularAtencionModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <form method="post" id="formAnularAtencion">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="anularAtencionModalLabel">Anular atención</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <p id="anularAtencionDescripcion"></p>
+                              <div class="form-group">
+                                <label for="motivoAnulacion">Motivo de anulación</label>
+                                <textarea id="motivoAnulacion" name="motivo_anulacion" class="form-control" rows="3" maxlength="500" required></textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                              <button type="submit" class="btn btn-danger">Confirmar anulación</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
         
                 </div>
         
@@ -117,5 +150,19 @@
   </div>
   <!-- /.content-wrapper -->
 
+{% if puede_anular_atenciones %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $('#anularAtencionModal').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget);
+      const atencionId = button.data('atencion-id');
+
+      $('#formAnularAtencion').attr('action', button.data('anulacion-url'));
+      $('#anularAtencionDescripcion').text('Indique el motivo para anular la atención ' + atencionId + '.');
+      $('#motivoAnulacion').val('').trigger('focus');
+    });
+  });
+</script>
+{% endif %}
 
 {% endblock %}
