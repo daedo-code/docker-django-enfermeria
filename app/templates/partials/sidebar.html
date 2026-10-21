@@ -15,7 +15,11 @@
           <img src="{% if user.perfil.id == 'I01' %} {% static 'dist/img/avatar5.png' %} {% else %} {% static 'dist/img/enfermero4.png' %} {% endif %} " class="img-circle elevation-2" style="" alt="User Image">
         </div>
         <div class="info">
-          <span class="d-block"><strong>{{ user.nombre }}</strong> [{{user.perfil.descripcion}}]</span>
+          
+		<span class="d-block text-white">
+          <strong>{{ user.nombre }}</strong> [{{ user.perfil.descripcion }}]
+        </span>
+		  
           <form action="{% url 'signout' %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-link p-0 text-white" style="font-size: 15px;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesion</button>
