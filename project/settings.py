@@ -13,6 +13,8 @@ from pathlib import Path
 
 import environ
 import pymysql
+from django.core.exceptions import ImproperlyConfigured
+from django.core.management.utils import get_random_secret_key
 
 pymysql.install_as_MySQLdb()
 
@@ -27,11 +29,20 @@ environ.Env.read_env(BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='unsafe-development-key-change-before-production')
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DJANGO_DEBUG', default=True)
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
+
+# En producción se exige una clave explícita para evitar iniciar con un secreto
+# conocido. En desarrollo, una clave de ejemplo se sustituye por una aleatoria
+# efímera para conservar la facilidad de arranque local.
+SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='')
+if not SECRET_KEY or SECRET_KEY.startswith('replace-with-'):
+    if DEBUG:
+        SECRET_KEY = get_random_secret_key()
+    else:
+        raise ImproperlyConfigured(
+            'DJANGO_SECRET_KEY debe configurarse con un valor aleatorio y privado.'
+        )
 
 ALLOWED_HOSTS = env.list(
     'DJANGO_ALLOWED_HOSTS',
@@ -149,6 +160,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'app.User'
+
+# Las vistas protegidas deben redirigir al formulario de inicio de sesión
+# definido por este proyecto, no a la ruta predeterminada de Django.
+LOGIN_URL = 'signin'
 
 FORCE_SCRIPT_NAME = (
     env("DJANGO_SCRIPT_NAME", default="").rstrip("/") or None

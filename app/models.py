@@ -53,3 +53,26 @@ class Atencion(models.Model):
     anulada = models.BooleanField(default=False)
     fechaAnulacion = models.DateTimeField(blank=True, null=True)
     anuladoPor = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='atenciones_anuladas')
+    motivoAnulacion = models.TextField(blank=True, null=True)
+
+
+class AuditoriaAtencion(models.Model):
+    CREACION = 'creacion'
+    EDICION = 'edicion'
+    ANULACION = 'anulacion'
+    ACCIONES = (
+        (CREACION, 'Creación'),
+        (EDICION, 'Edición'),
+        (ANULACION, 'Anulación'),
+    )
+
+    atencion = models.ForeignKey(Atencion, on_delete=models.PROTECT, related_name='auditorias')
+    actor = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='eventos_auditoria')
+    fecha = models.DateTimeField(auto_now_add=True)
+    accion = models.CharField(max_length=20, choices=ACCIONES)
+    motivo = models.TextField(blank=True)
+    valores_anteriores = models.JSONField(default=dict)
+    valores_nuevos = models.JSONField(default=dict)
+
+    class Meta:
+        ordering = ['-fecha']

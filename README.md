@@ -4,7 +4,7 @@ Aplicacion Django para gestionar pacientes, atenciones y encargados.
 
 ## Requisitos
 
-- Python 3.11 o superior
+- Python 3.12 o superior
 - Docker Desktop con Docker Compose
 - Un entorno virtual de Python con las dependencias de `requirements.txt`
 
@@ -48,15 +48,24 @@ Variables principales:
 DJANGO_SECRET_KEY
 DJANGO_DEBUG
 DJANGO_ALLOWED_HOSTS
-DJANGO_DB_USER
-DJANGO_DB_PASSWORD
-MYSQL_ROOT_PASSWORD
+DJANGO_SECURE_SSL_REDIRECT
 MYSQL_DATABASE
 MYSQL_USER
 MYSQL_PASSWORD
 MYSQL_HOST
 MYSQL_PORT
 ```
+
+`DJANGO_SECRET_KEY` debe ser un valor aleatorio, privado y distinto en cada
+entorno. En producción, la aplicación no inicia si falta la clave o conserva
+un valor de ejemplo. Con `DJANGO_DEBUG=true`, un valor de ejemplo se sustituye
+por una clave aleatoria efímera para facilitar el desarrollo local. Para
+producción, configura `DJANGO_DEBUG=false` y habilita
+`DJANGO_SECURE_SSL_REDIRECT=true` únicamente si el sitio se sirve por HTTPS.
+
+El contenedor de MySQL genera internamente una contraseña root aleatoria. Django
+solo usa `MYSQL_USER` y `MYSQL_PASSWORD`; no se debe definir ni compartir una
+contraseña root en el archivo `.env`.
 
 ## Perfiles y administrador
 

@@ -9,13 +9,14 @@ import matplotlib.pyplot as plt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import AtencionForm, PacienteEditForm, PacienteForm, UserEditForm, UserForm
-from .models import Atencion, Paciente, Perfil, User
+from .models import Atencion, AuditoriaAtencion, Paciente, Perfil, User
 
 
 ADMIN_PROFILE = 'I01'
@@ -163,17 +164,18 @@ def panelPacienteBloq(request, rut):
 @role_required(ADMIN_PROFILE, ENCARGADO_PROFILE)
 def panelAtencion(request):
     rows = Atencion.objects.select_related('paciente', 'practicante').order_by('-fechaInicio')
-    return render(request, 'pages/atencion/panel-atencion.html', {'rows': rows})
+    return render(request, 'pages/atencion/panel-atencion.html', _contexto_atenciones(request.user, rows))
 
 
 @require_POST
 @role_required(ADMIN_PROFILE, ENCARGADO_PROFILE)
 def searchAtencion(request):
     rows = Atencion.objects.filter(paciente_id=request.POST.get('rut', '')).select_related('paciente', 'practicante')
-    return render(request, 'pages/atencion/panel-atencion.html', {'rows': rows})
+    return render(request, 'pages/atencion/panel-atencion.html', _contexto_atenciones(request.user, rows))
 
 
 @role_required(ADMIN_PROFILE, ENCARGADO_PROFILE)
+@transaction.atomic
 def panelAtencionAdd(request, rut):
     paciente = get_object_or_404(Paciente, pk=rut, habilitado=True)
     if request.method == 'GET':
@@ -187,7 +189,10 @@ def panelAtencionAdd(request, rut):
         atencion = form.save(commit=False)
         atencion.paciente = paciente
         atencion.terms = True
+        if request.user.perfil_id == ENCARGADO_PROFILE and not request.user.is_superuser:
+            atencion.practicante = request.user
         atencion.save()
+        _registrar_auditoria(atencion, request.user, AuditoriaAtencion.CREACION, nuevos=_datos_atencion(atencion))
         return redirect('panel-atencion')
     if not request.POST.get('terms'):
         form.add_error(None, 'Debe confirmar que los datos fueron entregados por la persona.')
@@ -199,26 +204,67 @@ def panelAtencionAdd(request, rut):
 
 
 @role_required(ADMIN_PROFILE, ENCARGADO_PROFILE)
+@transaction.atomic
 def panelAtencionEdit(request, id):
     atencion = get_object_or_404(Atencion, pk=id)
+    if atencion.anulada:
+        raise PermissionDenied
+    if not _puede_editar_atencion(request.user, atencion):
+        raise PermissionDenied
     if request.method == 'GET':
         return render(request, 'pages/atencion/panel-atencion-edit.html', {'atencion': atencion, 'practicantes': _practicantes_permitidos(request.user)})
 
     form = AtencionForm(request.POST, instance=atencion, user=request.user)
     if form.is_valid():
+        valores_anteriores = _datos_atencion(atencion)
+        hubo_cambios = form.has_changed()
         form.save()
+        if hubo_cambios:
+            _registrar_auditoria(
+                atencion,
+                request.user,
+                AuditoriaAtencion.EDICION,
+                anteriores=valores_anteriores,
+                nuevos=_datos_atencion(atencion),
+            )
         return redirect('panel-atencion')
     return render(request, 'pages/atencion/panel-atencion-edit.html', {'atencion': atencion, 'practicantes': _practicantes_permitidos(request.user), 'form': form})
 
 
 @require_POST
 @role_required(ADMIN_PROFILE)
+@transaction.atomic
 def panelAtencionAnular(request, id):
     atencion = get_object_or_404(Atencion, pk=id)
+    motivo = request.POST.get('motivo_anulacion', '').strip()
+    if atencion.anulada:
+        return render(
+            request,
+            'pages/atencion/panel-atencion.html',
+            _contexto_atenciones(request.user, Atencion.objects.select_related('paciente', 'practicante').order_by('-fechaInicio'), error='La atención ya fue anulada.'),
+            status=400,
+        )
+    if not motivo:
+        return render(
+            request,
+            'pages/atencion/panel-atencion.html',
+            _contexto_atenciones(request.user, Atencion.objects.select_related('paciente', 'practicante').order_by('-fechaInicio'), error='Debe indicar el motivo de la anulación.'),
+            status=400,
+        )
+    valores_anteriores = _datos_atencion(atencion)
     atencion.anulada = True
     atencion.fechaAnulacion = timezone.now()
     atencion.anuladoPor = request.user
-    atencion.save(update_fields=['anulada', 'fechaAnulacion', 'anuladoPor'])
+    atencion.motivoAnulacion = motivo
+    atencion.save(update_fields=['anulada', 'fechaAnulacion', 'anuladoPor', 'motivoAnulacion'])
+    _registrar_auditoria(
+        atencion,
+        request.user,
+        AuditoriaAtencion.ANULACION,
+        motivo=motivo,
+        anteriores=valores_anteriores,
+        nuevos=_datos_atencion(atencion),
+    )
     return redirect('panel-atencion')
 
 
@@ -232,6 +278,59 @@ def _practicantes_permitidos(user):
     if user.perfil_id == ENCARGADO_PROFILE and not user.is_superuser:
         return queryset.filter(pk=user.pk)
     return queryset
+
+
+def _es_administrador(user):
+    return user.is_superuser or user.perfil_id == ADMIN_PROFILE
+
+
+def _puede_editar_atencion(user, atencion):
+    return _es_administrador(user) or atencion.practicante_id == user.pk
+
+
+def _contexto_atenciones(user, rows, **extra):
+    rows = list(rows)
+    if _es_administrador(user):
+        editable_atencion_ids = [row.id for row in rows if not row.anulada]
+    else:
+        editable_atencion_ids = [
+            row.id for row in rows
+            if not row.anulada and row.practicante_id == user.pk
+        ]
+    return {
+        'rows': rows,
+        'editable_atencion_ids': editable_atencion_ids,
+        'puede_anular_atenciones': _es_administrador(user),
+        **extra,
+    }
+
+
+def _datos_atencion(atencion):
+    return {
+        'sbp': atencion.sbp,
+        'dbp': atencion.dbp,
+        'pulso': atencion.pulso,
+        'temperatura': atencion.temperatura,
+        'saturacion': atencion.saturacion,
+        'procedimiento': atencion.procedimiento,
+        'razon_ingreso': atencion.razonIngreso,
+        'practicante_id': atencion.practicante_id,
+        'anulada': atencion.anulada,
+        'fecha_anulacion': atencion.fechaAnulacion.isoformat() if atencion.fechaAnulacion else None,
+        'anulado_por_id': atencion.anuladoPor_id,
+        'motivo_anulacion': atencion.motivoAnulacion,
+    }
+
+
+def _registrar_auditoria(atencion, actor, accion, motivo='', anteriores=None, nuevos=None):
+    AuditoriaAtencion.objects.create(
+        atencion=atencion,
+        actor=actor,
+        accion=accion,
+        motivo=motivo,
+        valores_anteriores=anteriores or {},
+        valores_nuevos=nuevos or {},
+    )
 
 
 def generar_metricas():

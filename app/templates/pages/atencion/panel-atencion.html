@@ -34,6 +34,9 @@
                 <div class="title-item">
                     <h3 class="" for="rutificador">Atencion</h3>
                 </div>
+                {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
                 
                 <div class="">
                     <div class="header-formulario mt-5 mb-5">
@@ -57,9 +60,10 @@
                               <th>DBP</th>
                               <th>Temp</th>
                               <th>Pulso</th>
-                              <th>SatO2</th>
-                              <th>motivo</th>
-                              <th>Actions</th>
+                               <th>SatO2</th>
+                               <th>motivo</th>
+                               <th>Estado</th>
+                               <th>Actions</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -73,24 +77,28 @@
                               <td style="width: 2%;">{{row.dbp}}</td>
                               <td style="width: 2%;">{{row.temperatura}}</td>
                               <td style="width: 2%;">{{row.pulso}}</td>
-                              <td style="width: 2%;">{{row.saturacion}}</td>
-                              <td style="width: 2%;">{{row.razonIngreso}}</td>
-                              <td style="width: 10%;">
+                               <td style="width: 2%;">{{row.saturacion}}</td>
+                               <td style="width: 2%;">{{row.razonIngreso}}</td>
+                               <td style="width: 2%;">{% if row.anulada %}Anulada{% else %}Activa{% endif %}</td>
+                               <td style="width: 10%;">
 
-                                      <a type="button" class="btn btn-primary col-5 text-center" href="{% url 'panel-atencion-edit' row.id %}" style="width: 150px;">
-                                        Editar <i class="fas fa-edit" style="display: none;"></i>
-                                      </a>
-                                      {% if not row.anulada and user.perfil_id == 'I01' %}
-                                      <form method="post" action="{% url 'panel-atencion-anular' row.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-primary col-5 text-center" style="width: 150px;" onclick="return confirm('Anular esta atencion?');">Anular</button>
-                                      </form>
-                                      {% endif %}
+                                       {% if row.id in editable_atencion_ids %}
+                                       <a type="button" class="btn btn-primary col-5 text-center" href="{% url 'panel-atencion-edit' row.id %}" style="width: 150px;">
+                                         Editar <i class="fas fa-edit" style="display: none;"></i>
+                                       </a>
+                                       {% endif %}
+                                       {% if not row.anulada and puede_anular_atenciones %}
+                                       <form method="post" action="{% url 'panel-atencion-anular' row.id %}" class="d-inline">
+                                         {% csrf_token %}
+                                         <input type="text" name="motivo_anulacion" class="form-control mb-1" maxlength="500" required placeholder="Motivo de anulación">
+                                         <button type="submit" class="btn btn-primary col-5 text-center" style="width: 150px;" onclick="return confirm('Anular esta atencion?');">Anular</button>
+                                       </form>
+                                       {% endif %}
 
-                              </td>
-                          {% endfor %}
-                          </tr>
-                      </tbody>
+                               </td>
+                           </tr>
+                           {% endfor %}
+                       </tbody>
                   </table>
         
                 </div>
