@@ -13,7 +13,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Panel</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'panel-atencion' %}">Panel</a></li>
               <li class="breadcrumb-item active">Paciente</li>
             </ol>
           </div><!-- /.col -->
@@ -42,7 +42,7 @@
                     <div class="header-formulario mt-5 mb-5">
                     </div>
                     <div class="row mb-5 search-box">
-                        <form class="d-flex justify-content-around col-12 mb-3 mt-3 pt-3 pb-3" action="/search/atencion/" method="POST">
+                        <form class="d-flex justify-content-around col-12 mb-3 mt-3 pt-3 pb-3" action="{% url 'search-atencion' %}" method="POST">
                             {% csrf_token %}
                             <input class="bg-white rounded col-6 text-center" type="text" id="rut" name="rut" placeholder="Ingrese Rut" />
                             <button type="submit" class="btn btn-primary px-5">Buscar</button>

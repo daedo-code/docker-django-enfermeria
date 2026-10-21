@@ -35,3 +35,9 @@
   edición posterior.
 - Se añadió una auditoría separada para registrar creación, edición y
   anulación con actor, fecha, motivo y valores anteriores/nuevos.
+
+### Etapa 4: limpieza de templates y rutas
+
+- Se eliminaron templates sin referencias activas.
+- Los enlaces y acciones internas de los templates activos ahora usan rutas
+  nombradas con la etiqueta `{% url %}`.
